@@ -3,7 +3,7 @@ import Head from 'next/head';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 
-const NodeBird = ({ Component }) => {
+const App = ({ Component }) => {
   return (
     <>
       <Head>
@@ -14,8 +14,8 @@ const NodeBird = ({ Component }) => {
   );
 };
 
-NodeBird.propTypes = {
+App.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
 
-export default NodeBird;
+export default App;

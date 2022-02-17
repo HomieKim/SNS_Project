@@ -16,20 +16,20 @@ const AppLayout = ({ children }) => {
   return (
     <div>
       <Menu mode="horizontal">
-        <Menu.Item>
+        <Menu.Item key="home">
           <Link href="/">
             <a>노드버드</a>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key="profile">
           <Link href="/profile">
             <a>프로필</a>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key="search">
           <StyleSearchInput enterButton />
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key="signup">
           <Link href="/signup">
             <a>회원가입</a>
           </Link>
@@ -37,7 +37,7 @@ const AppLayout = ({ children }) => {
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLogedin ? <UserProfile /> : <LoginForm setIsLogedin={setIsLogedin}/>}
+          {isLogedin ? <UserProfile setIsLogedin={setIsLogedin} /> : <LoginForm setIsLogedin={setIsLogedin}/>}
         </Col>
         <Col xs={24} md={12}>
           {children}

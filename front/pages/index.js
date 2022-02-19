@@ -6,7 +6,7 @@ import PostForm from '../components/PostForm';
 
 const Home = () => {
 
-    const {isLoggedIn} = useSelector((state) => state.user);
+    const {isLoggedIn} = useSelector((state) => state.me);
     const {mainPosts} = useSelector((state)=> state.post);
 
     return (

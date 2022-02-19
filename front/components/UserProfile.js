@@ -1,12 +1,16 @@
 import { Button, Card } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
-import propTypes from 'prop-types';
-import React, { useCallback } from 'react';
 
-const UserProfile = ({setIsLogedin})=> {
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../reducers/user';
+
+const UserProfile = ()=> {
+
+    const dispatch = useDispatch();
 
     const onLogOut = useCallback(()=> {
-        setIsLogedin(false);
+        dispatch(logoutAction());
     },[]);
     
     return (
@@ -26,8 +30,6 @@ const UserProfile = ({setIsLogedin})=> {
     );
 };
 
-UserProfile.propTypes = {
-    setIsLogedin: propTypes.func.isRequired,
-}
+
 
 export default UserProfile;

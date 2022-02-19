@@ -28,17 +28,17 @@ const Signup = ()=>{
     const onChangePasswordCheck = useCallback((e)=> {
         setPasswordCheck(e.target.value);
         setPasswordError(e.target.value !== password);
-        console.log('호출');
+        //console.log('비밀번호 체크');
 
     },[passwordCheck]);
     const onSubmit = useCallback(()=> {
         if(password !== passwordCheck){
-            console.log('password : ', password);
-            console.log('passwordCheck : ', passwordCheck);
+            // console.log('password : ', password);
+            // console.log('passwordCheck : ', passwordCheck);
             return setPasswordError(true);
         }
         if(!isChecked){
-            console.log('에러체크')
+            //console.log('에러체크')
             return setCheckError(true);
         }
         console.log('회원가입 성공');
@@ -54,7 +54,7 @@ const Signup = ()=>{
             setPasswordError(false);
         }
     },[password]);
-    
+
     return (
         <AppLayout>
             <Head>

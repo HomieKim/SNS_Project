@@ -1,6 +1,6 @@
 import React from 'react';
 
 const PostCardContent = () =>{
-  return <div></div>
+  return <div>zzzzz</div>
 }
 export default PostCardContent;

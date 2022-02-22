@@ -24,7 +24,7 @@ const PostForm = () => {
 
   return (
     <Form
-      style={{ margin: "10px 0 20x" }}
+      style={{ margin: "10px" }}
       encType="multipart/form-data"
       onFinish={onSubmit}
     >

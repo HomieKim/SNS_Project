@@ -10,9 +10,9 @@ import {
   MessageOutlined,
   RetweetOutlined,
 } from "@ant-design/icons/lib/icons";
-import Avatar from 'antd/lib/avatar/avatar';
-import PostCardContent from './PostCardContent';
-import PostImages from './PostImages';
+import Avatar from "antd/lib/avatar/avatar";
+import PostCardContent from "./PostCardContent";
+import PostImages from "./PostImages";
 
 const StyleCardWrpper = styled.div`
   margin-bottom: 20px;
@@ -33,7 +33,15 @@ const PostCard = ({ post }) => {
 
   return (
     <StyleCardWrpper>
+     
       <Card
+        title={
+          <div style={{display: "flex", alignItems : 'center'}}>
+            <Avatar>{post.User.nickname[0]}</Avatar>
+            <div style={{marginLeft :"20px" }}>{post.User.nickname}</div>
+          </div>
+        }
+        
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
@@ -67,13 +75,16 @@ const PostCard = ({ post }) => {
         ]}
         // extract
       >
-        <Card.Meta 
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
+        <Card.Meta
+          // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+          // title={post.User.nickname}
           description={<PostCardContent postData={post.content} />}
         />
       </Card>
-      {isCommentOpen && <></>}
+      {isCommentOpen &&
+      <>
+        댓글 부분
+      </>}
     </StyleCardWrpper>
   );
 };

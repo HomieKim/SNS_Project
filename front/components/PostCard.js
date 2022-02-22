@@ -1,4 +1,4 @@
-import { Button, Card, Popover } from "antd";
+import { Button, Card, Comment, List, Popover } from "antd";
 import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -13,6 +13,8 @@ import {
 import Avatar from "antd/lib/avatar/avatar";
 import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
+import CommentForm from './CommentForm';
+import Link from 'next/link';
 
 const StyleCardWrpper = styled.div`
   margin-bottom: 20px;
@@ -83,8 +85,27 @@ const PostCard = ({ post }) => {
       </Card>
       {isCommentOpen &&
       <>
-        댓글 부분
-      </>}
+        <CommentForm  post={post}/>
+        <List
+          header={`${post.Comments.length} 댓글`}
+          itemLayout="horizontal"
+          dataSource={post.Comments}
+          renderItem={(item)=>(
+            <li>
+              <Comment
+                author={item.User.nickname}
+                avatar={(
+                  <Link  href={{ pathname: '/user', query: { id: item.User.id } }} as={`/user/${item.User.id}`}>
+                    <a><Avatar>{item.User.nickname[0]}</Avatar></a>
+                  </Link>
+                )}
+                content={item.content}
+              />
+            </li>
+          )}
+        />
+      </>
+      }
     </StyleCardWrpper>
   );
 };

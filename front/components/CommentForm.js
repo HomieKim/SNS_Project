@@ -1,23 +1,32 @@
 import { Button, Form, Input } from 'antd';
 import { PropTypes } from 'prop-types';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+//import { useSelector } from 'react-redux';
+import useInput from '../hooks/useInput';
+import styled from 'styled-components';
+
+const Style_Button = styled(Button)`
+  position: absolute;
+  right:0;
+  bottom: -40px;
+  z-index : 1;
+`;
+
+
 
 const CommentForm = ({post})=>{
-  const [commentText, setCommentText] = useState('');
+ //const id = useSelector((state)=> state.user.me?.id);
+  const [commentText, onChangeCommentText] = useInput('');
 
   const onSubmitComment = useCallback(() => {
-    console.log(commentText);
+    console.log(post.id,commentText);
   }, [commentText]);
-
-  const onChangeCommentText = useCallback((e) => {
-    setCommentText(e.target.value);
-  }, []);
 
   return (
     <Form onFinish={onSubmitComment}>
-      <Form.Item style={{ position: 'relative', margin: 0 }}>
+      <Form.Item style={{position: 'relative', margin: 0 }}>
         <Input.TextArea rows={4} value={commentText} onChange={onChangeCommentText} />
-        <Button style={{ position: 'absolute', right: 0, bottom: -40 }} type="primary" htmlType="submit">삐약</Button>
+        <Style_Button type="primary"  htmlType="submit">댓글쓰기</Style_Button>
       </Form.Item>
     </Form>
   );

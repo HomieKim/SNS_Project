@@ -12,7 +12,17 @@ const StyleSearchInput = styled(Input.Search)`
   vertical-align : middle;
 `;
 
+const StyleContainer = styled.div`
+  max-width : 1280px;
+  margin : auto;
+  display : flex;
+  border-bottom : 1px solid black;
+`;
 
+const ContentsContainer = styled.div`
+  max-width : 1280px;
+  margin : auto;
+`
 const AppLayout = ({ children }) => {
 
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
@@ -20,7 +30,8 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
-      <Menu mode="horizontal">
+      <Menu >
+        <StyleContainer>
         <Menu.Item key="home">
           <Link href="/">
             <a>노드버드</a>
@@ -39,7 +50,9 @@ const AppLayout = ({ children }) => {
             <a>회원가입</a>
           </Link>
         </Menu.Item>
+        </StyleContainer>
       </Menu>
+      <ContentsContainer>
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {isLoggedIn ? <UserProfile  /> : <LoginForm />}
@@ -51,6 +64,7 @@ const AppLayout = ({ children }) => {
           <a href='https://github.com/HomieKim' target="_blank" rel="noreferrer noopener">github</a>
         </Col>
       </Row>
+      </ContentsContainer>
     </div>
   );
 };

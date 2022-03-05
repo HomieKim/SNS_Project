@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 import Slider from 'react-slick';
 
-
 const ImgWrapper = styled.div`
   padding: 16px;
   text-align: center;
@@ -21,9 +20,27 @@ const Global = createGlobalStyle`
   .ant-card-cover {
     transform: none !important;
   }
+  .slick-dots {
+    position : static;
+  }
+  
+  .slick-prev {
+    z-index : 100;
+    left :3px;
+    :before {
+      color : grey;
+    }
+  }
+  
+  .slick-next {
+    right : 3px;
+    :before {
+      color : grey;
+    }
+  }
 `
 const SlideWrapper = styled.div`
-  max-height : 800px;
+  max-height : 700px;
   overflow : hidden;
 `;
 const PostImages = ({images})=>{

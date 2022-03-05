@@ -16,7 +16,7 @@ const StyleContainer = styled.div`
   max-width : 1280px;
   margin : auto;
   display : flex;
-  border-bottom : 1px solid black;
+  
 `;
 
 const ContentsContainer = styled.div`
@@ -31,6 +31,7 @@ const AppLayout = ({ children }) => {
   return (
     <div>
       <Menu >
+        <div style={{width : '100%',borderBottom : '1px solid rgb(230,230,230)'}}>
         <StyleContainer>
         <Menu.Item key="home">
           <Link href="/">
@@ -51,6 +52,7 @@ const AppLayout = ({ children }) => {
           </Link>
         </Menu.Item>
         </StyleContainer>
+        </div>
       </Menu>
       <ContentsContainer>
       <Row gutter={8}>

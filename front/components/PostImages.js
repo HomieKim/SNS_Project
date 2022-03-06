@@ -10,6 +10,7 @@ const ImgWrapper = styled.div`
   & img {
     margin: 0 auto;
     max-height: 750px;
+    cursor: pointer;
   }
 `;
 const Global = createGlobalStyle`
@@ -44,9 +45,13 @@ const SlideWrapper = styled.div`
   overflow : hidden;
 `;
 const PostImages = ({images})=>{
-  //const [showImagesZoom, setShowImagesZoom] = useState(false);
+  const [showImagesZoom, setShowImagesZoom] = useState(false);
+  const [clickedImg, setClickedImg] = useState('');
   const onZoom = useCallback(()=> {
-    //setShowImagesZoom(true);
+    setShowImagesZoom(true);
+  },[]);
+  const onClose = useCallback(() => {
+    setShowImagesZoom(false);
   },[]);
 
   const settings = {
@@ -59,9 +64,9 @@ const PostImages = ({images})=>{
 
   if(images.length === 1) {
     return (
-      <>
-        <img style={{ maxHeight : 750}} src={images[0].src} alt={images[0].src} onClick={onZoom} />
-      </>
+      <ImgWrapper>
+        <img style={{ maxHeight : 750, cursor : 'pointer'}} src={images[0].src} alt={images[0].src} onClick={onZoom} />
+      </ImgWrapper>
     )
   }
 

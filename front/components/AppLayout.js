@@ -7,6 +7,8 @@ import LoginForm from './LoginForm';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { createGlobalStyle } from 'styled-components';
+
 
 const StyleSearchInput = styled(Input.Search)`
   vertical-align : middle;
@@ -15,8 +17,7 @@ const StyleSearchInput = styled(Input.Search)`
 const StyleContainer = styled.div`
   max-width : 1280px;
   margin : auto;
-  display : flex;
-  
+  //display : flex;
 `;
 
 const ContentsContainer = styled.div`
@@ -30,9 +31,9 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
-      <Menu >
-        <div style={{width : '100%',borderBottom : '1px solid rgb(230,230,230)'}}>
-        <StyleContainer>
+      <div style={{width : '100%',borderBottom : '1px solid rgb(230,230,230)'}}>
+      <StyleContainer>
+      <Menu mode='horizontal'>
         <Menu.Item key="home">
           <Link href="/">
             <a>노드버드</a>
@@ -51,9 +52,9 @@ const AppLayout = ({ children }) => {
             <a>회원가입</a>
           </Link>
         </Menu.Item>
-        </StyleContainer>
-        </div>
       </Menu>
+      </StyleContainer>
+      </div>
       <ContentsContainer>
       <Row gutter={8}>
         <Col xs={24} md={6}>

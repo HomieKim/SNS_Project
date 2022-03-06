@@ -8,9 +8,9 @@ export const initialState = {
       },
       content: "첫 번째 게시글",
       Images: [
-        {
-          src: "https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726",
-        },
+        // {
+        //   src: "https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726",
+        // },
         {
           src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
         },

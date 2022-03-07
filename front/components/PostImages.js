@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 import Slider from 'react-slick';
+import ImageZoom from './ImageZoom';
 
 const ImgWrapper = styled.div`
   padding: 16px;
@@ -47,7 +48,9 @@ const SlideWrapper = styled.div`
 const PostImages = ({images})=>{
   const [showImagesZoom, setShowImagesZoom] = useState(false);
   const [clickedImg, setClickedImg] = useState('');
-  const onZoom = useCallback(()=> {
+  const onZoom = useCallback((e)=> {
+    //console.log(e.target.currentSrc);
+    setClickedImg(e.target.currentSrc);
     setShowImagesZoom(true);
   },[]);
   const onClose = useCallback(() => {
@@ -66,6 +69,9 @@ const PostImages = ({images})=>{
     return (
       <ImgWrapper>
         <img style={{ maxHeight : 750, cursor : 'pointer'}} src={images[0].src} alt={images[0].src} onClick={onZoom} />
+        {
+          showImagesZoom && <ImageZoom image={clickedImg} onClose={onClose} />
+        }
       </ImgWrapper>
     )
   }
@@ -78,12 +84,15 @@ const PostImages = ({images})=>{
           {
             images.map((item) => (
               <ImgWrapper key={item.src} >
-                <img   src={item.src} alt={item.src} />
+                <img   src={item.src} alt={item.src} onClick={onZoom} />
               </ImgWrapper>
             ))
           }
         </Slider>
       </SlideWrapper>
+      {
+        showImagesZoom && <ImageZoom image={clickedImg} onClose={onClose} />
+      }
     </div>
   )
 }

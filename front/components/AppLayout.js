@@ -7,7 +7,7 @@ import LoginForm from './LoginForm';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { createGlobalStyle } from 'styled-components';
+
 
 
 const StyleSearchInput = styled(Input.Search)`

@@ -35,6 +35,9 @@ export const initialState = {
     },
   ],
   imagePaths: [],
+  addPostLoading : false,
+  addPostDone : false,
+  addPostError : null,
   postAdded: false,
 };
 
@@ -50,21 +53,35 @@ const dummyPost = {
 };
 
 // 액션 타입 정의
-const ADD_POST = "ADD_POST";
+export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 // 액션 함수 정의
 export const addPost = {
-    type: ADD_POST,
+    type: ADD_POST_REQUEST,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POST:
+    case ADD_POST_REQUEST:
+      return {
+        addPostLoading : true,
+        addPostDone : false,
+        addPostError : null,
+      };
+    case ADD_POST_SUCCESS :
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
-        postAdded: true,
-      };
+        addPostLoading : false,
+        addPostDone : true,
+        mainPosts : [dummyPost, ...state.mainPosts]
+      }
+    case ADD_POST_FAILURE :
+      return {
+        addPostLoading : false,
+        addPostError : action.error
+      }
     default:
       return state;
   }

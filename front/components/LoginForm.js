@@ -1,9 +1,9 @@
 import { Input, Form, Button } from 'antd';
 import Link from 'next/link';
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { loginAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
     margin-top : 10px;
@@ -15,7 +15,7 @@ const StyleLogInForm = styled(Form)`
 
 const LoginForm = () => {
     const dispatch = useDispatch() 
-
+    const {logInLoading} = useSelector((state) => state.user);
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
 
@@ -29,7 +29,7 @@ const LoginForm = () => {
 
     const onSubmitForm = useCallback(()=> {
         console.log({id, password});
-        dispatch(loginAction({id, password}));
+        dispatch(loginRequestAction({id, password}));
     },[id, password]);
 
     return (
@@ -45,7 +45,7 @@ const LoginForm = () => {
                 <Input name='user-password'value={password} onChange={onChangePassword} type='password' required />
             </div>
             <ButtonWrapper>
-                <Button type='primary' htmlType='submit' loading={false}>로그인</Button>
+                <Button type='primary' htmlType='submit' loading={logInLoading}>로그인</Button>
                 <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             </ButtonWrapper>
         </StyleLogInForm>
@@ -54,3 +54,11 @@ const LoginForm = () => {
 
 
 export default LoginForm;
+
+/*
+로그인 버튼 누르면 logInRequest가 실행 됨
+그러면 미들웨어인 saga에 yield takeLatest(LOG_IN_REQUEST, logIn)에 걸리게 됨 
+logIn 함수 실행 되면서 비동기 요청
+리듀서의 LOG_IN_REQUEST랑도 동시에 실행 됨
+saga에서 비동기 요청이 실행 되면 LOG_IN_SUCCESS 실행
+*/

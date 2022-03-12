@@ -58,8 +58,11 @@ export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 // 액션 함수 정의
-export const addPost = {
-    type: ADD_POST_REQUEST,
+export const addPost = (data)=>{
+    return {
+      type: ADD_POST_REQUEST,
+      data
+    }
 };
 
 const reducer = (state = initialState, action) => {

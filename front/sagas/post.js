@@ -1,5 +1,6 @@
+import axios from 'axios';
 import {fork, all, takeLatest, put, delay} from 'redux-saga/effects'
-import { ADD_POST_FAILURE, ADD_POST_REQUEST } from '../reducers/post'
+import { ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS } from '../reducers/post'
 
 function addPostAPI(data) {
   return axios.post('/api/post', data);

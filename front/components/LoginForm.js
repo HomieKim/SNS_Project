@@ -16,11 +16,11 @@ const StyleLogInForm = styled(Form)`
 const LoginForm = () => {
     const dispatch = useDispatch() 
     const {logInLoading} = useSelector((state) => state.user);
-    const [id, setId] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const onChageId = useCallback((e)=> {
-        setId(e.target.value);
+    const onChageEmail = useCallback((e)=> {
+        setEmail(e.target.value);
     },[]);
 
     const onChangePassword = useCallback((e) => {
@@ -28,17 +28,17 @@ const LoginForm = () => {
     },[]);
 
     const onSubmitForm = useCallback(()=> {
-        console.log({id, password});
-        dispatch(loginRequestAction({id, password}));
-    },[id, password]);
+        console.log({email, password});
+        dispatch(loginRequestAction({email, password}));
+    },[email, password]);
 
     return (
         // antd에서 제공하는 Form의 onFinish는 자동으로 preventDefault 적용되어있음
         <StyleLogInForm onFinish={onSubmitForm}>
             <div>
-                <label htmlFor='user-id'>아이디</label>
+                <label htmlFor='user-email'>이메일</label>
                 <br/>
-                <Input name='user-id' value={id} onChange={onChageId} required/>
+                <Input name='user-email' type="email" value={email} onChange={onChageEmail} required/>
             </div>
             <div>
                 <label htmlFor='user-password'>비밀번호</label> <br/>

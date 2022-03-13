@@ -1,5 +1,5 @@
-import axios from "axios";
-import { all, fork, takeLatest, put, delay } from "redux-saga/effects";
+import axios from 'axios';
+import { all, fork, takeLatest, put, delay } from 'redux-saga/effects';
 import {
   FOLLOW_FAILURE,
   FOLLOW_REQUEST,
@@ -16,35 +16,34 @@ import {
   UNFOLLOW_FAILURE,
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS,
-} from "../reducers/user";
+} from '../reducers/user';
 
 // API 호출 함수
 
 function logInAPI(data) {
-  return axios.post("/api/login", data);
+  return axios.post('/api/login', data);
 }
 
 function logOutAPI() {
-  return axios.post("/api/logout");
+  return axios.post('/api/logout');
 }
 
-function signUpAPI(){
+function signUpAPI() {
   return axios.post('/api/signUp');
 }
 
-function followAPI(){
+function followAPI() {
   return axios.post('/api/follow');
 }
 
-function unfollowAPI(){
-  return axios.post('/api/unfollow')
+function unfollowAPI() {
+  return axios.post('/api/unfollow');
 }
-
 
 // 사가 함수
 function* logIn(action) {
   try {
-    console.log("saga LogIn");
+    console.log('saga LogIn');
     yield delay(1000);
     yield put({
       type: LOG_IN_SUCCESS,
@@ -74,46 +73,46 @@ function* logOut() {
   }
 }
 
-function* signUp(){
-  try{
+function* signUp() {
+  try {
     yield delay(1000);
     yield put({
-      type : SIGN_UP_SUCCESS,
+      type: SIGN_UP_SUCCESS,
     });
-  }catch(err){
+  } catch (err) {
     yield put({
-      type : SIGN_UP_FAILURE,
-      error : err.response.data,
-    })
+      type: SIGN_UP_FAILURE,
+      error: err.response.data,
+    });
   }
 }
 
-function* follow(action){
+function* follow(action) {
   try {
-    yield(1000);
+    yield 1000;
     yield put({
       type: FOLLOW_SUCCESS,
-      data : action.data
-    })
-  }catch(err){
+      data: action.data,
+    });
+  } catch (err) {
     yield put({
       type: FOLLOW_FAILURE,
-      error : err.response.data,
-    })
+      error: err.response.data,
+    });
   }
 }
-function* unfollow(action){
+function* unfollow(action) {
   try {
-    yield(1000);
+    yield 1000;
     yield put({
       type: UNFOLLOW_SUCCESS,
-      data : action.data
-    })
-  }catch(err){
+      data: action.data,
+    });
+  } catch (err) {
     yield put({
       type: UNFOLLOW_FAILURE,
-      error : err.response.data,
-    })
+      error: err.response.data,
+    });
   }
 }
 
@@ -126,7 +125,7 @@ function* watchLogOut() {
   yield takeLatest(LOG_OUT_REQUEST, logOut);
 }
 
-function* watchSignUp(){
+function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 

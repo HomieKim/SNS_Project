@@ -1,30 +1,37 @@
-import { Button, Form, Input } from "antd";
-import React, { useCallback, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addPost } from "../reducers/post";
+import { Button, Form, Input } from 'antd';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPost } from '../reducers/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
-  const { imagePaths } = useSelector((state) => state.post);
-  const [text, setText] = useState("");
+  const { imagePaths, addPostDone } = useSelector((state) => state.post);
+  const [text, setText] = useState('');
   const imageInput = useRef();
-  
-  const onClickImageUpload = useCallback(()=> {
+
+  const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
-  },[imageInput.current]);
+  }, [imageInput.current]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost);
+    dispatch(addPost(text));
     setText('');
-  }, []);
-  
+  }, [text]);
+
+  // 서버에서 게시글이 정상적으로 등록 되었을 때만 textArea를 비워줘야함
+  useEffect(() => {
+    if (addPostDone) {
+      setText('');
+    }
+  }, [addPostDone]);
+
   const onChageText = useCallback((e) => {
     setText(e.target.value);
   }, []);
 
   return (
     <Form
-      style={{ margin: "10px" }}
+      style={{ margin: '10px' }}
       encType="multipart/form-data"
       onFinish={onSubmit}
     >
@@ -37,15 +44,17 @@ const PostForm = () => {
       <div>
         <input type="file" multiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button type='primary' style={{float : 'right'}} htmlType='submit'>tiwt!</Button>
+        <Button type="primary" style={{ float: 'right' }} htmlType="submit">
+          tiwt!
+        </Button>
       </div>
       <div>
         {imagePaths.map((v) => {
           return (
-            <div key={v} style={{ display: "inline-block" }}>
+            <div key={v} style={{ display: 'inline-block' }}>
               <img
-                src={"http://localhost:3065/" + v}
-                style={{ width: "200px" }}
+                src={`http://localhost:3065/${v}`}
+                style={{ width: '200px' }}
                 alt={v}
               />
               <div>

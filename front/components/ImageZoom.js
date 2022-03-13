@@ -1,6 +1,6 @@
-import { PropTypes } from "prop-types";
-import React, { useCallback } from "react";
-import styled from "styled-components";
+import { PropTypes } from 'prop-types';
+import React, { useCallback } from 'react';
+import styled from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
 
 const StyledBackground = styled.div`
@@ -10,43 +10,42 @@ const StyledBackground = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  overflow-y : hidden;
+  overflow-y: hidden;
 `;
 
 const StyleWrapper = styled.div`
-  display : flex;
-  flex-direction : column;
-  position : absolute;
-  width : 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
   height: 100%;
-  text-align : center;
-  line-height : 100%;
-  justify-content : center;
-  align-items : center;
-  background : rgba(0,0,0,0.85);
-  padding :12px 0;
-`
+  text-align: center;
+  line-height: 100%;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 12px 0;
+`;
 const ImageWrapper = styled.div`
-  width : 500px;
-  height : 650px;
+  width: 500px;
+  height: 650px;
 
-  @media screen and (max-width : 1280px){
-    width : 400px;
-    height : 450px;
+  @media screen and (max-width: 1280px) {
+    width: 400px;
+    height: 450px;
   }
-  
 `;
 
 const StyleHeader = styled.div`
-  padding : 8px 4px;
-  background-color : white;
-  text-align : center;
+  padding: 8px 4px;
+  background-color: white;
+  text-align: center;
   & span {
-    font-size : 1.2rem;
-    font-weight : bold;
-    font-family : 'Open Sans'
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Open Sans';
   }
-`
+`;
 const CloseBtn = styled(CloseOutlined)`
   position: absolute;
   right: 0;
@@ -54,11 +53,11 @@ const CloseBtn = styled(CloseOutlined)`
   padding: 15px;
   line-height: 14px;
   cursor: pointer;
-  color : #E1341E;
+  color: #e1341e;
 `;
 const ImageZoom = ({ image, onClose }) => {
-  const closeHandler = useCallback((e)=> {
-    if(e.target.localName === 'img') {
+  const closeHandler = useCallback((e) => {
+    if (e.target.localName === 'img') {
       return;
     }
     onClose();
@@ -67,11 +66,15 @@ const ImageZoom = ({ image, onClose }) => {
     <StyledBackground>
       <StyleHeader>
         <span>Image Zoom</span>
-        <CloseBtn onClick={onClose}/>
+        <CloseBtn onClick={onClose} />
       </StyleHeader>
       <StyleWrapper onClick={closeHandler}>
         <ImageWrapper>
-          <img style={{width :'100%', height : '100%'}} src={image} alt='Zoomed Image' /> 
+          <img
+            style={{ width: '100%', height: '100%' }}
+            src={image}
+            alt="Zoomed_image"
+          />
         </ImageWrapper>
       </StyleWrapper>
     </StyledBackground>

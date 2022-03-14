@@ -6,52 +6,69 @@ import styled from 'styled-components';
 import { loginRequestAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
-    margin-top : 10px;
+  margin-top: 10px;
 `;
 
 const StyleLogInForm = styled(Form)`
-    padding : 10px;
+  padding: 10px;
 `;
 
 const LoginForm = () => {
-    const dispatch = useDispatch() 
-    const {logInLoading} = useSelector((state) => state.user);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const { logInLoading } = useSelector((state) => state.user);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const onChageEmail = useCallback((e)=> {
-        setEmail(e.target.value);
-    },[]);
+  const onChageEmail = useCallback((e) => {
+    setEmail(e.target.value);
+  }, []);
 
-    const onChangePassword = useCallback((e) => {
-        setPassword(e.target.value);
-    },[]);
+  const onChangePassword = useCallback((e) => {
+    setPassword(e.target.value);
+  }, []);
 
-    const onSubmitForm = useCallback(()=> {
-        console.log({email, password});
-        dispatch(loginRequestAction({email, password}));
-    },[email, password]);
+  const onSubmitForm = useCallback(() => {
+    console.log({ email, password });
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password]);
 
-    return (
-        // antd에서 제공하는 Form의 onFinish는 자동으로 preventDefault 적용되어있음
-        <StyleLogInForm onFinish={onSubmitForm}>
-            <div>
-                <label htmlFor='user-email'>이메일</label>
-                <br/>
-                <Input name='user-email' type="email" value={email} onChange={onChageEmail} required/>
-            </div>
-            <div>
-                <label htmlFor='user-password'>비밀번호</label> <br/>
-                <Input name='user-password'value={password} onChange={onChangePassword} type='password' required />
-            </div>
-            <ButtonWrapper>
-                <Button type='primary' htmlType='submit' loading={logInLoading}>로그인</Button>
-                <Link href="/signup"><a><Button>회원가입</Button></a></Link>
-            </ButtonWrapper>
-        </StyleLogInForm>
-    );
+  return (
+    // antd에서 제공하는 Form의 onFinish는 자동으로 preventDefault 적용되어있음
+    <StyleLogInForm onFinish={onSubmitForm}>
+      <div>
+        <label htmlFor="user-email">이메일</label>
+        <br />
+        <Input
+          name="user-email"
+          type="email"
+          value={email}
+          onChange={onChageEmail}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="user-password">비밀번호</label> <br />
+        <Input
+          name="user-password"
+          value={password}
+          onChange={onChangePassword}
+          type="password"
+          required
+        />
+      </div>
+      <ButtonWrapper>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>
+          로그인
+        </Button>
+        <Link href="/signup">
+          <a>
+            <Button>회원가입</Button>
+          </a>
+        </Link>
+      </ButtonWrapper>
+    </StyleLogInForm>
+  );
 };
-
 
 export default LoginForm;
 

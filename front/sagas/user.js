@@ -19,7 +19,6 @@ import {
 } from '../reducers/user';
 
 // API 호출 함수
-
 function logInAPI(data) {
   return axios.post('/api/login', data);
 }

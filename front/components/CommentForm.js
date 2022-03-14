@@ -15,7 +15,9 @@ const StyleButton = styled(Button)`
 
 const CommentForm = ({ post }) => {
   const id = useSelector((state) => state.user.me?.id);
-  const { addCommentDone } = useSelector((state) => state.post);
+  const { addCommentDone, addCommentLoading } = useSelector(
+    (state) => state.post,
+  );
   const dispatch = useDispatch();
   const [commentText, onChangeCommentText, setComment] = useInput('');
 
@@ -28,7 +30,9 @@ const CommentForm = ({ post }) => {
   }, [commentText]);
 
   useEffect(() => {
+    console.log('addCommentDone : ', addCommentDone);
     if (addCommentDone) {
+      console.log('댓글 지워져야 됨');
       setComment('');
     }
   }, [addCommentDone]);
@@ -41,7 +45,11 @@ const CommentForm = ({ post }) => {
           value={commentText}
           onChange={onChangeCommentText}
         />
-        <StyleButton type="primary" htmlType="submit">
+        <StyleButton
+          type="primary"
+          htmlType="submit"
+          loading={addCommentLoading}
+        >
           댓글쓰기
         </StyleButton>
       </Form.Item>

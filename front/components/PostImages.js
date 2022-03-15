@@ -13,6 +13,7 @@ const ImgWrapper = styled.div`
   & img {
     margin: 0 auto;
     max-height: 750px;
+    max-width: 100%;
     cursor: pointer;
   }
 `;

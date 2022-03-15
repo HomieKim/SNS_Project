@@ -1,5 +1,6 @@
 import shortid from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 /* eslint-disable default-param-last */
 export const initialState = {
@@ -13,12 +14,15 @@ export const initialState = {
       content: '첫 번째 게시글 #테스트 #프로필',
       Images: [
         {
+          id: shortid.generate(),
           src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
         },
         {
+          id: shortid.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
         },
         {
+          id: shortid.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
         },
       ],
@@ -49,6 +53,32 @@ export const initialState = {
   addCommentDone: false,
   addCommentError: null,
 };
+// faker 사용해 더미 데이터 생성
+initialState.mainPosts = initialState.mainPosts.concat(
+  // eslint-disable-next-line prettier/prettier
+  Array(20).fill().map(() => ({
+      id: shortid.generate(),
+      User: {
+        id: shortid.generate(),
+        nickname: faker.name.findName(),
+      },
+      content: faker.lorem.paragraph(),
+      Images: [
+        {
+          src: faker.image.image(),
+        },
+      ],
+      Comments: [
+        {
+          User: {
+            id: shortid.generate(),
+            nickname: faker.name.findName(),
+          },
+          content: faker.lorem.sentence(),
+        },
+      ],
+    })),
+);
 // 더미 데이터 생성 함수
 const dummyPost = (data) => ({
   id: data.id,

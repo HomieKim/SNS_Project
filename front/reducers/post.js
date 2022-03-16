@@ -4,59 +4,25 @@ import faker from 'faker';
 
 /* eslint-disable default-param-last */
 export const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: '제로초',
-      },
-      content: '첫 번째 게시글 #테스트 #프로필',
-      Images: [
-        {
-          id: shortid.generate(),
-          src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
-        },
-        {
-          id: shortid.generate(),
-          src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
-        },
-        {
-          id: shortid.generate(),
-          src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
-        },
-      ],
-      Comments: [
-        {
-          User: {
-            nickname: 'nero',
-          },
-          content: '우와 개정판이 나왔군요~',
-        },
-        {
-          User: {
-            nickname: 'hero',
-          },
-          content: '얼른 사고싶어요~',
-        },
-      ],
-    },
-  ],
+  mainPosts: [],
   imagePaths: [],
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: null,
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  hasMorePosts: true,
 };
-// faker 사용해 더미 데이터 생성
-initialState.mainPosts = initialState.mainPosts.concat(
-  // eslint-disable-next-line prettier/prettier
-  Array(20).fill().map(() => ({
+// faker 사용해 더미 데이터 생성하는 함수
+// eslint-disable-next-line prettier/prettier
+export const generateDummyPost = (number) =>Array(number).fill().map(() => ({
       id: shortid.generate(),
       User: {
         id: shortid.generate(),
@@ -77,8 +43,8 @@ initialState.mainPosts = initialState.mainPosts.concat(
           content: faker.lorem.sentence(),
         },
       ],
-    })),
-);
+    }));
+
 // 더미 데이터 생성 함수
 const dummyPost = (data) => ({
   id: data.id,
@@ -101,6 +67,10 @@ const dummyComment = (data) => ({
 });
 
 /* 액션 타입 정의 */
+// 데이터 load
+export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
 // 포스트 add
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -181,6 +151,22 @@ const reducer = (state = initialState, action) =>
         break;
       }
       case ADD_COMMENT_FAILURE:
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
+        break;
+      case LOAD_POST_REQUEST:
+        draft.loadCommentLoading = true;
+        draft.loadCommentDone = false;
+        draft.loadCommentError = null;
+        break;
+      case LOAD_POST_SUCCESS: {
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
+        draft.mainPosts = action.data.concat(draft.mainPosts);
+        draft.hasMorePosts = draft.mainPosts.length < 50;
+        break;
+      }
+      case LOAD_POST_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
         break;

@@ -16,17 +16,20 @@ import PostCardContent from './PostCardContent';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import { removePost } from '../reducers/post';
+import FollowButton from './FollowButton';
 
 const StyleCardWrpper = styled.div`
   margin-bottom: 20px;
 `;
 
 const PostCard = ({ post }) => {
-  const id = useSelector((state) => state.user.me && state.user.me.id);
+  // const id = useSelector((state) => state.user.me && state.user.me.id);
   const { removePostLoading } = useSelector((state) => state.post);
   const [liked, setLiked] = useState(false);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
+  const id = me && me.id;
 
   const onToggleComment = useCallback(() => {
     setIsCommentOpen((prev) => !prev);
@@ -86,7 +89,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        // extract
+        extra={me ? <FollowButton post={post} /> : ''}
       >
         <Card.Meta
           // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

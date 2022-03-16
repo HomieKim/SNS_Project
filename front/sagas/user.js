@@ -28,7 +28,7 @@ function logOutAPI() {
 }
 
 function signUpAPI() {
-  return axios.post('/api/signUp');
+return axios.post('/api/signUp');
 }
 
 function followAPI() {

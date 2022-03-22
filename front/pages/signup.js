@@ -3,9 +3,10 @@ import Head from 'next/head';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import Router from 'next/router';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
-import { SIGN_UP_REQUEST } from '../reducers/user';
+import { SIGN_UP_DONE, SIGN_UP_REQUEST } from '../reducers/user';
 
 const StyleError = styled.div`
   color: red;
@@ -27,8 +28,24 @@ const Signup = () => {
   const [checkError, setCheckError] = useState(false);
 
   const dispatch = useDispatch();
-  const { signUpLoading } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError } = useSelector(
+    (state) => state.user,
+  );
 
+  useEffect(() => {
+    if (signUpDone) {
+      Router.replace('/');
+      dispatch({
+        type: SIGN_UP_DONE,
+      });
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
   const onChangePasswordCheck = useCallback(
     (e) => {
       setPasswordCheck(e.target.value);

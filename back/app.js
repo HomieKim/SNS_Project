@@ -1,11 +1,13 @@
 const express = require('express'); 
-
+const cors = require('cors');
+const dotenv = require('dotenv')
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user')
-const cors = require('cors');
-
+const passportConfig = require('./passport');
 const db = require('./models');
-
+const session = require('express-session');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
 const app = express();
 db.sequelize.sync()
   .then(() => {
@@ -13,9 +15,22 @@ db.sequelize.sync()
   })  
   .catch(console.error);
 
+passportConfig();
+dotenv.config();
+
 // 프론트에서 보내준 데이터를 req.body 안에 넣어 주는 역할
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); // form submit 할때 urlencoded 필요
+app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 설정
+// 세션 설정
+app.use(session({
+  saveUninitialized: false,
+  resave : false,
+  secret: process.env.COOKIE_SECRET,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 // cors 설정
 app.use(cors({
   origin: true,

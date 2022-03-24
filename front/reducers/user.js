@@ -28,6 +28,10 @@ export const initialState = {
   me: null,
   signUpData: {},
   loginData: {},
+  // user 정보 가져오기
+  loadMyInfoLoading: false,
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
 };
 
 /* 액션 타입 정의 */
@@ -35,6 +39,10 @@ export const initialState = {
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
+// 로그인 유지를 위한 액션
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 // 로그아웃
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
@@ -80,23 +88,23 @@ export const signUpReqeustAction = () => {
   };
 };
 
-// 더미 데이터
-const dummyUser = (data) => ({
-  ...data,
-  nickname: 'homie',
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [
-    { nickname: '부기초' },
-    { nickname: 'Chanho Lee' },
-    { nickname: 'neue zeal' },
-  ],
-  Followers: [
-    { nickname: '부기초' },
-    { nickname: 'Chanho Lee' },
-    { nickname: 'neue zeal' },
-  ],
-});
+// 더미 데이터 생성 함수
+// const dummyUser = (data) => ({
+//   ...data,
+//   nickname: 'homie',
+//   id: 1,
+//   Posts: [{ id: 1 }],
+//   Followings: [
+//     { nickname: '부기초' },
+//     { nickname: 'Chanho Lee' },
+//     { nickname: 'neue zeal' },
+//   ],
+//   Followers: [
+//     { nickname: '부기초' },
+//     { nickname: 'Chanho Lee' },
+//     { nickname: 'neue zeal' },
+//   ],
+// });
 
 // eslint-disable-next-line prettier/prettier
 const reducer = (state = initialState, action) =>
@@ -194,6 +202,20 @@ const reducer = (state = initialState, action) =>
         break;
       case REMOVE_POST_TO_ME:
         draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
+        break;
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoError = null;
+        draft.loadMyInfoDone = false;
+        break;
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadMyInfoLoading = false;
+        draft.me = action.data;
+        draft.loadMyInfoDone = true;
+        break;
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoError = action.error;
         break;
       default:
         break;

@@ -4,6 +4,9 @@ import {
   FOLLOW_FAILURE,
   FOLLOW_REQUEST,
   FOLLOW_SUCCESS,
+  LOAD_MY_INFO_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -37,6 +40,10 @@ function followAPI() {
 
 function unfollowAPI() {
   return axios.post('/api/unfollow');
+}
+
+function loadMyInfoAPI() {
+  return axios.get('/user');
 }
 
 // 사가 함수
@@ -115,6 +122,21 @@ function* unfollow(action) {
   }
 }
 
+function* loadMyInfo(action) {
+  try {
+    const result = yield call(loadMyInfoAPI, action.data);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 // watch 함수 (이벤트 리스너 같은 역할)
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
@@ -136,6 +158,10 @@ function* watchUnfollw() {
   yield takeLatest(UNFOLLOW_REQUEST, unfollow);
 }
 
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -143,5 +169,6 @@ export default function* userSaga() {
     fork(watchSignUp),
     fork(watchFollow),
     fork(watchUnfollw),
+    fork(watchLoadMyInfo),
   ]);
 }

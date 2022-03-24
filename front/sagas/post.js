@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { fork, all, takeLatest, put, delay } from 'redux-saga/effects';
-import shortid from 'shortid';
+import { fork, all, takeLatest, put, delay, call } from 'redux-saga/effects';
 import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
@@ -20,7 +19,7 @@ import { ADD_POST_TO_ME, REMOVE_POST_TO_ME } from '../reducers/user';
 
 // API 함수
 function addPostAPI(data) {
-  return axios.post('/api/post', data);
+  return axios.post('/post', { content: data });
 }
 
 function addCommnetAPI(data) {
@@ -36,18 +35,14 @@ function loadPostAPI(lastId) {
 // 사가 함수
 function* addPost(action) {
   try {
-    yield delay(1000);
-    const id = shortid.generate();
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id,
-        content: action.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: id,
+      data: result.data.id,
     });
   } catch (err) {
     console.error(err);
@@ -60,7 +55,7 @@ function* addPost(action) {
 
 function* addComment(action) {
   try {
-    yield delay(1000);
+    const result = yield call(addCommnetAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: action.data,

@@ -2,10 +2,41 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const {User, Post} = require('../models'); // db.User, db.Post
+const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const router = express.Router();
 
+router.get('/', async (req, res, next)=>{
+  try{ 
+    if(req.user){
+      const UserWithoutPassword = await User.findOne({
+        where: {id: req.id},
+        attributes: {
+          exclude: ['password']
+        },
+        include:[{
+          model: Post,
+          attributes: ['id'],
+        },{
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },{
+          model: User,
+          as: 'Followers',
+          attributes: ['id'],
+        }]
+      })
+      return res.status(200).json(UserWithoutPassword);
+    }else{
+      res.status(200).json(null);
+    }
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
 
-router.post('/', async (req, res, next)=> { // POST /user/
+router.post('/',isNotLoggedIn, async (req, res, next)=> { // POST /user/
   try{
     // email 중복 체크
     const exUser = await User.findOne({
@@ -29,7 +60,7 @@ router.post('/', async (req, res, next)=> { // POST /user/
   }
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (err, user, info)=> {
     if(err){  // 서버 에러
       console.error(err);
@@ -51,12 +82,15 @@ router.post('/login', (req, res, next) => {
         },
         include:[{
           model: Post,
+          attributes: ['id'],
         },{
           model: User,
           as: 'Followings',
+          attributes: ['id'],
         },{
           model: User,
           as: 'Followers',
+          attributes: ['id'],
         }]
       })
       return res.status(200).json(UserWithoutPassword);
@@ -64,7 +98,7 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/logout', (req,res,next)=> {
+router.post('/logout', isLoggedIn, (req,res,next)=> {
   req.logout();
   req.session.destroy();
   res.send('ok');

@@ -15,7 +15,11 @@ import Link from 'next/link';
 import PostCardContent from './PostCardContent';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
-import { removePost } from '../reducers/post';
+import {
+  LIKE_POST_REQUEST,
+  removePost,
+  UNLIKE_POST_REQUEST,
+} from '../reducers/post';
 import FollowButton from './FollowButton';
 
 const StyleCardWrpper = styled.div`
@@ -25,18 +29,34 @@ const StyleCardWrpper = styled.div`
 const PostCard = ({ post }) => {
   // const id = useSelector((state) => state.user.me && state.user.me.id);
   const { removePostLoading } = useSelector((state) => state.post);
-  const [liked, setLiked] = useState(false);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
   const id = me && me.id;
+  const liked = post.Likers.find((v) => v.id === id);
+
+  const onLike = useCallback(() => {
+    if (!id) {
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
+
+  const onUnlike = useCallback(() => {
+    if (!id) {
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
 
   const onToggleComment = useCallback(() => {
     setIsCommentOpen((prev) => !prev);
-  }, []);
-
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
   }, []);
 
   const onRemovePost = useCallback(() => {
@@ -59,10 +79,10 @@ const PostCard = ({ post }) => {
             <HeartTwoTone
               twoToneColor="#eb2f96"
               key="heart"
-              onClick={onToggleLike}
+              onClick={onUnlike}
             />
           ) : (
-            <HeartOutlined key="heart" onClick={onToggleLike} />
+            <HeartOutlined key="heart" onClick={onLike} />
           ),
           <MessageOutlined key="message" onClick={onToggleComment} />,
           <Popover
@@ -135,8 +155,11 @@ PostCard.propTypes = {
     User: PropTypes.object,
     content: PropTypes.string,
     createdAt: PropTypes.string,
-    Comments: PropTypes.arrayOf(PropTypes.any),
-    Images: PropTypes.arrayOf(PropTypes.any),
+    Comments: PropTypes.arrayOf(PropTypes.object),
+    Images: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
+    RetweetId: PropTypes.number,
+    Retweet: PropTypes.objectOf(PropTypes.any),
   }).isRequired,
 };
 

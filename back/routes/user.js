@@ -125,7 +125,8 @@ router.patch('/:userId/follow', isLoggedIn, async(req, res, next) => {
     if(!user){
       res.status(403).send('존재하지 않는 유저 입니다.');
     }
-
+    await user.addFollowers(req.user.id);
+    res.status(200).json({UserId : parseInt(req.params.userId, 10)});
   }catch(err){
     console.error(err);
     next(err);
@@ -133,7 +134,40 @@ router.patch('/:userId/follow', isLoggedIn, async(req, res, next) => {
 });
 router.delete('/:userId/follow', isLoggedIn, async(req, res, next) => {
   try{
-    
+    const user = await User.findOne({where: {id: req.params.userId}});
+    if(!user){
+      res.status(403).send('존재하지 않는 유저 입니다.');
+    }
+    await user.removeFollowers(req.user.id);
+    res.status(200).json({UserId : parseInt(req.params.userId, 10)});
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+
+router.get('/followers',isLoggedIn, async(req,res,next)=>{
+  try{  
+    const user = await User.findOne({where: {id: req.user.id}});
+    if(!user){
+      res.status(403).send('존재하지 않는 유저 입니다.');
+    }
+    const followers = user.getFollowers();
+    res.status(200).json(followers);
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+
+router.get('/followings',isLoggedIn, async(req,res,next)=>{
+  try{  
+    const user = await User.findOne({where: {id: req.user.id}});
+    if(!user){
+      res.status(403).send('존재하지 않는 유저 입니다.');
+    }
+    const followings = user.getFollowings();
+    res.status(200).json(followings);
   }catch(err){
     console.error(err);
     next(err);

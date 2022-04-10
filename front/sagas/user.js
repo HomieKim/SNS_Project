@@ -7,6 +7,12 @@ import {
   FOLLOW_FAILURE,
   FOLLOW_REQUEST,
   FOLLOW_SUCCESS,
+  LOAD_FOLLOWERS_FAILURE,
+  LOAD_FOLLOWERS_REQUEST,
+  LOAD_FOLLOWERS_SUCCESS,
+  LOAD_FOLLOWINGS_FAILURE,
+  LOAD_FOLLOWINGS_REQUEST,
+  LOAD_FOLLOWINGS_SUCCESS,
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
@@ -37,12 +43,12 @@ function signUpAPI(data) {
   return axios.post('/user', data);
 }
 
-function followAPI() {
-  return axios.post('/api/follow');
+function followAPI(data) {
+  return axios.patch(`/user/${data}/follow`, data);
 }
 
-function unfollowAPI() {
-  return axios.post('/api/unfollow');
+function unfollowAPI(data) {
+  return axios.delete(`/user/${data}/follow`, data);
 }
 
 function loadMyInfoAPI() {
@@ -53,6 +59,13 @@ function changeNicknameAPI(data) {
   return axios.patch('/user/nickname', { nickname: data });
 }
 
+function loadFollowersAPI(data) {
+  return axios.get('/followers', data);
+}
+
+function loadFollowingsAPI(data) {
+  return axios.get('/followings', data);
+}
 // 사가 함수
 function* logIn(action) {
   try {
@@ -102,10 +115,11 @@ function* signUp(action) {
 
 function* follow(action) {
   try {
-    yield 1000;
+    const result = yield call(followAPI, action.data);
+    console.log('follow 요청 result: ', result);
     yield put({
       type: FOLLOW_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -116,10 +130,10 @@ function* follow(action) {
 }
 function* unfollow(action) {
   try {
-    yield 1000;
+    const result = yield call(unfollowAPI, action.data);
     yield put({
       type: UNFOLLOW_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -160,6 +174,38 @@ function* changeNickname(action) {
   }
 }
 
+function* loadFollowers(action) {
+  try {
+    const result = yield call(loadFollowersAPI, action.data);
+    yield put({
+      type: LOAD_FOLLOWERS_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: LOAD_FOLLOWERS_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* loadFollowings(action) {
+  try {
+    const result = yield call(loadFollowingsAPI, action.data);
+    yield put({
+      type: LOAD_FOLLOWINGS_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: LOAD_FOLLOWINGS_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 // watch 함수 (이벤트 리스너 같은 역할)
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
@@ -187,6 +233,12 @@ function* watchLoadMyInfo() {
 function* watchChangeNickname() {
   yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
 }
+function* watchLoadFollowers() {
+  yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers);
+}
+function* watchLoadFollowings() {
+  yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings);
+}
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -196,5 +248,7 @@ export default function* userSaga() {
     fork(watchUnfollw),
     fork(watchLoadMyInfo),
     fork(watchChangeNickname),
+    fork(watchLoadFollowers),
+    fork(watchLoadFollowings),
   ]);
 }

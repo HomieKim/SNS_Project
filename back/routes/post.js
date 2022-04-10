@@ -95,4 +95,19 @@ router.delete('/:id/like', isLoggedIn, async(res, req, next) => {
   }
 });
 
+router.delete('/:postId', isLoggedIn ,async(res, req, next) => {
+  try{
+    await Post.destroy({ // destroy 는 시퀄라이즈에서 제공하는 삭제하는 함수
+      where: {
+        id: req.params.postId,
+        UserId: req.user.id,
+      },
+    });
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+
 module.exports = router;

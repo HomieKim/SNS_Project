@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fork, all, takeLatest, put, delay, call } from 'redux-saga/effects';
+import { fork, all, takeLatest, put, call } from 'redux-saga/effects';
 import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
@@ -31,8 +31,8 @@ function addCommnetAPI(data) {
   return axios.post(`/api/post/${data.postId}/comment`, data);
 }
 
-function removeAPI(data) {
-  return axios.delete('/api/post', data);
+function removePostAPI(data) {
+  return axios.delete(`/post/${data}`);
 }
 function loadPostAPI(lastId) {
   return axios.get(`/posts?lastId=${lastId || 0}`);
@@ -83,7 +83,7 @@ function* addComment(action) {
 
 function* removePost(action) {
   try {
-    yield delay(1000);
+    yield call(removePostAPI, action.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
       data: action.data,

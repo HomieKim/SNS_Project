@@ -104,6 +104,42 @@ router.post('/logout', isLoggedIn, (req,res,next)=> {
   res.send('ok');
 });
 
+// 닉네임 수정
+router.patch('/nickname', isLoggedIn, async (req, res, next) => {
+  try{
+    await User.update({
+      nickname: req.body.nickname,
+    },{
+      where: {id : req.user.id},
+    });
+    res.status(200).json({nickname: req.body.nickname});
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+
+router.patch('/:userId/follow', isLoggedIn, async(req, res, next) => {
+  try{
+    const user = await User.findOne({where: {id: req.params.userId}});
+    if(!user){
+      res.status(403).send('존재하지 않는 유저 입니다.');
+    }
+
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+router.delete('/:userId/follow', isLoggedIn, async(req, res, next) => {
+  try{
+    
+  }catch(err){
+    console.error(err);
+    next(err);
+  }
+});
+
 module.exports = router;
 
 /*

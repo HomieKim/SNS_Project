@@ -39,6 +39,10 @@ export const initialState = {
   loadFollowingsLoading: false,
   loadFollowingsDone: false,
   loadFollowingsError: null,
+  // 팔로워 차단 하기
+  removeFollowerLoading: false,
+  removeFollowerDone: false,
+  removeFollowerError: null,
 };
 
 /* 액션 타입 정의 */
@@ -81,7 +85,10 @@ export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
 export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
 export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
 export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
-
+// 팔로워 차단
+export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
+export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
+export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 // success나 failure 액션은 사가에서 put으로 호출하기 때문에 reducer에서는 따로 정의 안해도 됨 요청 액션 생성함수만 정의
 export const loginRequestAction = (data) => {
   return {
@@ -239,7 +246,7 @@ const reducer = (state = initialState, action) =>
         break;
       case LOAD_FOLLOWERS_SUCCESS:
         draft.loadFollowersLoading = false;
-        draft.me.followers = action.data;
+        draft.me.Followers = action.data;
         draft.loadFollowersDone = true;
         break;
       case LOAD_FOLLOWERS_FAILURE:
@@ -253,12 +260,28 @@ const reducer = (state = initialState, action) =>
         break;
       case LOAD_FOLLOWINGS_SUCCESS:
         draft.loadFollowingsLoading = false;
-        draft.me.followings = action.data;
+        draft.me.Followings = action.data;
         draft.loadFollowingsDone = true;
         break;
       case LOAD_FOLLOWINGS_FAILURE:
         draft.loadFollowingsLoading = false;
         draft.loadFollowingsError = action.error;
+        break;
+      case REMOVE_FOLLOWER_REQUEST:
+        draft.removeFollowerLoading = true;
+        draft.removeFollowerError = null;
+        draft.removeFollowerDone = false;
+        break;
+      case REMOVE_FOLLOWER_SUCCESS:
+        draft.removeFollowerLoading = false;
+        draft.me.Followers = draft.me.Followers.filter(
+          (v) => v.id !== action.data.UserId,
+        );
+        draft.removeFollowerDone = true;
+        break;
+      case REMOVE_FOLLOWER_FAILURE:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerError = action.error;
         break;
       default:
         break;

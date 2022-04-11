@@ -1,7 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPost } from '../reducers/post';
+import { addPost, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -14,9 +14,17 @@ const PostForm = () => {
   }, [imageInput.current]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text));
+    if (!text || !text.trim()) {
+      return alert('게시글을 작성해 주세요');
+    }
+    const formData = new FormData();
+    imagePaths.forEach((p) => {
+      formData.append('image', p);
+    });
+    formData.append('content', text);
+    dispatch(addPost(formData));
     setText('');
-  }, [text]);
+  }, [text, imagePaths]);
 
   // 서버에서 게시글이 정상적으로 등록 되었을 때만 textArea를 비워줘야함
   useEffect(() => {
@@ -29,6 +37,23 @@ const PostForm = () => {
     setText(e.target.value);
   }, []);
 
+  const onChangeImages = useCallback((e) => {
+    console.log('images : ', e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append('image', f);
+    });
+    dispatch({
+      type: UPLOAD_IMAGES_REQUEST,
+      data: imageFormData,
+    });
+  }, []);
+  const onClickRemove = useCallback((index) => {
+    dispatch({
+      type: REMOVE_IMAGE,
+      data: index,
+    });
+  }, []);
   return (
     <Form
       style={{ margin: '10px' }}
@@ -42,14 +67,21 @@ const PostForm = () => {
         placeholder="What's New?"
       />
       <div>
-        <input type="file" multiple hidden ref={imageInput} />
+        <input
+          type="file"
+          name="image"
+          multiple
+          hidden
+          ref={imageInput}
+          onChange={onChangeImages}
+        />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type="primary" style={{ float: 'right' }} htmlType="submit">
           tiwt!
         </Button>
       </div>
       <div>
-        {imagePaths.map((v) => {
+        {imagePaths.map((v, i) => {
           return (
             <div key={v} style={{ display: 'inline-block' }}>
               <img
@@ -58,7 +90,7 @@ const PostForm = () => {
                 alt={v}
               />
               <div>
-                <Button>제거</Button>
+                <Button onClick={() => onClickRemove(i)}>제거</Button>
               </div>
             </div>
           );

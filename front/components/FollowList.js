@@ -2,8 +2,11 @@ import { StopOutlined } from '@ant-design/icons/lib/icons';
 import { Button, Card, List } from 'antd';
 import propTypes from 'prop-types';
 import React, { useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST } from '../reducers/user';
 
 const FollowList = ({ header, data }) => {
+  // 스타일 객체 리렌더링 안되게
   const StyleList = useMemo(
     () => ({
       marginBottom: '20px',
@@ -38,7 +41,20 @@ const FollowList = ({ header, data }) => {
     }),
     [],
   );
-
+  // 상태 관리 로직
+  const dispatch = useDispatch();
+  const onCancel = (id) => () => {
+    if (header === '팔로잉') {
+      dispatch({
+        type: UNFOLLOW_REQUEST,
+        data: id,
+      });
+    }
+    dispatch({
+      type: REMOVE_FOLLOWER_REQUEST,
+      data: id,
+    });
+  };
   return (
     <List
       style={StyleList}
@@ -54,7 +70,9 @@ const FollowList = ({ header, data }) => {
       dataSource={data}
       renderItem={(item) => (
         <List.Item style={StyleListItem}>
-          <Card actions={[<StopOutlined key="stop" />]}>
+          <Card
+            actions={[<StopOutlined key="stop" onClick={onCancel(item.id)} />]}
+          >
             <Card.Meta description={item.nickname} />
           </Card>
         </List.Item>

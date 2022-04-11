@@ -10,6 +10,7 @@ const db = require('./models');
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 const app = express();
 dotenv.config();
@@ -29,9 +30,10 @@ app.use(cors({
 }));
 
 
-// 프론트에서 보내준 데이터를 req.body 안에 넣어 주는 역할
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // form submit 할때 urlencoded 필요
+app.use('/', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json()); // 프론트에서 보내준 데이터를 req.body 안에 넣어 주는 역할
+app.use(express.urlencoded({ extended: true })); // form submit 으로 넘어온 데이터 받을 때 urlencoded 필요
+// form에서 넘어온 이미지는 multer 사용
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 설정
 // 세션 설정
 app.use(session({

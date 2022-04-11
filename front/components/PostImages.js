@@ -73,7 +73,7 @@ const PostImages = ({ images }) => {
       <ImgWrapper>
         <img
           style={{ maxHeight: 750, cursor: 'pointer' }}
-          src={images[0].src}
+          src={`http://localhost3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
         />
@@ -89,7 +89,11 @@ const PostImages = ({ images }) => {
         <Slider {...settings}>
           {images.map((item) => (
             <ImgWrapper key={item.src}>
-              <img src={item.src} alt={item.src} onClick={onZoom} />
+              <img
+                src={`http://localhost3065/${item.src}`}
+                alt={item.src}
+                onClick={onZoom}
+              />
             </ImgWrapper>
           ))}
         </Slider>

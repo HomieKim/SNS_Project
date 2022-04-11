@@ -19,12 +19,15 @@ import {
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
+  UPLOAD_IMAGES_FAILURE,
+  UPLOAD_IMAGES_REQUEST,
+  UPLOAD_IMAGES_SUCCESS,
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_TO_ME } from '../reducers/user';
 
 // API 함수
 function addPostAPI(data) {
-  return axios.post('/post', { content: data });
+  return axios.post('/post', data); // formData는 json 형식으로 감싸지 않고 바로 보냄
 }
 
 function addCommnetAPI(data) {
@@ -44,7 +47,9 @@ function likePostAPI(data) {
 function unlikePostAPI(data) {
   return axios.delete(`/post/${data}/like`);
 }
-
+function uploadImagesAPI(data) {
+  return axios.post('post/images', data);
+}
 // 사가 함수
 function* addPost(action) {
   try {
@@ -146,6 +151,21 @@ function* unlikePost(action) {
     });
   }
 }
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesAPI, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
 
 // watch함수
 function* watchAddPost() {
@@ -166,6 +186,9 @@ function* watchLikePost() {
 function* watchUnLikePost() {
   yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
 }
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
@@ -174,5 +197,6 @@ export default function* postSaga() {
     fork(watchLoadPost),
     fork(watchLikePost),
     fork(watchUnLikePost),
+    fork(watchUploadImages),
   ]);
 }

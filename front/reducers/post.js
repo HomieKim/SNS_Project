@@ -191,15 +191,15 @@ const reducer = (state = initialState, action) =>
         draft.addCommentError = action.error;
         break;
       case LOAD_POST_REQUEST:
-        draft.loadCommentLoading = true;
-        draft.loadCommentDone = false;
-        draft.loadCommentError = null;
+        draft.loadPostLoading = true;
+        draft.loadPostDone = false;
+        draft.loadPostError = null;
         break;
       case LOAD_POST_SUCCESS: {
         draft.loadPostLoading = false;
         draft.loadPostDone = true;
-        draft.mainPosts = action.data.concat(draft.mainPosts);
-        draft.hasMorePosts = draft.mainPosts.length < 50;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePosts = action.data.length === 10;
         break;
       }
       case LOAD_POST_FAILURE:

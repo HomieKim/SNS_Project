@@ -11,9 +11,15 @@ const Home = () => {
   const dispatch = useDispatch();
   const [ref, inView] = useInView();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePosts, loadPostLoading } = useSelector(
+  const { mainPosts, hasMorePosts, loadPostLoading, retweeError } = useSelector(
     (state) => state.post,
   );
+
+  useEffect(() => {
+    if (retweeError) {
+      alert(retweeError);
+    }
+  }, [retweeError]);
 
   useEffect(() => {
     dispatch({

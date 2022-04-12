@@ -16,6 +16,9 @@ import {
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  RETWEET_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
@@ -50,6 +53,9 @@ function unlikePostAPI(data) {
 function uploadImagesAPI(data) {
   return axios.post('post/images', data);
 }
+function retweetAPI(data) {
+  return axios.post(`/post/${data}/retweet`);
+}
 // 사가 함수
 function* addPost(action) {
   try {
@@ -66,7 +72,7 @@ function* addPost(action) {
     console.error(err);
     yield put({
       type: ADD_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -81,7 +87,7 @@ function* addComment(action) {
   } catch (err) {
     yield put({
       type: ADD_COMMENT_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -101,7 +107,7 @@ function* removePost(action) {
     console.log(err);
     yield put({
       type: REMOVE_POST_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -166,7 +172,21 @@ function* uploadImages(action) {
     });
   }
 }
-
+function* retweet(action) {
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: RETWEET_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
 // watch함수
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
@@ -189,6 +209,9 @@ function* watchUnLikePost() {
 function* watchUploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
+function* watchRetweet() {
+  yield takeLatest(RETWEET_REQUEST, retweet);
+}
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
@@ -198,5 +221,6 @@ export default function* postSaga() {
     fork(watchLikePost),
     fork(watchUnLikePost),
     fork(watchUploadImages),
+    fork(watchRetweet),
   ]);
 }

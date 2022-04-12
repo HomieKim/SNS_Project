@@ -18,6 +18,7 @@ import CommentForm from './CommentForm';
 import {
   LIKE_POST_REQUEST,
   removePost,
+  RETWEET_REQUEST,
   UNLIKE_POST_REQUEST,
 } from '../reducers/post';
 import FollowButton from './FollowButton';
@@ -60,8 +61,21 @@ const PostCard = ({ post }) => {
   }, []);
 
   const onRemovePost = useCallback(() => {
-    dispatch(removePost(post.id));
-  }, []);
+    if (!id) {
+      alert('로그인이 필요합니다.');
+    }
+    return dispatch(removePost(post.id));
+  }, [id]);
+
+  const onRetweet = useCallback(() => {
+    if (!id) {
+      alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: RETWEET_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
 
   return (
     <StyleCardWrpper>
@@ -69,12 +83,16 @@ const PostCard = ({ post }) => {
         title={
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Avatar>{post.User.nickname[0]}</Avatar>
-            <div style={{ marginLeft: '20px' }}>{post.User.nickname}</div>
+            <div style={{ marginLeft: '20px' }}>
+              {post.RetweetId && post.Retweet
+                ? post.User.nickname
+                : `${post.User.nickname} 님이 Retweet`}
+            </div>
           </div>
         }
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <RetweetOutlined key="retweet" />,
+          <RetweetOutlined key="retweet" onClick={onRetweet} />,
           liked ? (
             <HeartTwoTone
               twoToneColor="#eb2f96"
@@ -111,11 +129,33 @@ const PostCard = ({ post }) => {
         ]}
         extra={me ? <FollowButton post={post} /> : ''}
       >
-        <Card.Meta
-          // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          // title={post.User.nickname}
-          description={<PostCardContent postData={post.content} />}
-        />
+        {post.RetweetId && post.Retweet ? (
+          <Card
+            title={
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                <div style={{ marginLeft: '20px' }}>
+                  {post.Retweet.User.nickname}
+                </div>
+              </div>
+            }
+            cover={
+              post.Retweet.Images[0] && (
+                <PostImages images={post.Retweet.Images} />
+              )
+            }
+          >
+            <Card.Meta
+              description={<PostCardContent postData={post.content} />}
+            />
+          </Card>
+        ) : (
+          <Card.Meta
+            // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+            // title={post.User.nickname}
+            description={<PostCardContent postData={post.content} />}
+          />
+        )}
       </Card>
       {isCommentOpen && (
         <>

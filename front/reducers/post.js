@@ -97,7 +97,7 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 // 댓글 add
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
-export const ADD_COMMENT_FAILURE = 'ADD_Comment_FAILURE';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 // like unlike
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
@@ -203,8 +203,8 @@ const reducer = (state = initialState, action) =>
         break;
       }
       case LOAD_POST_FAILURE:
-        draft.addCommentLoading = false;
-        draft.addCommentError = action.error;
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
         break;
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;
@@ -212,7 +212,8 @@ const reducer = (state = initialState, action) =>
         draft.likePostError = null;
         break;
       case LIKE_POST_SUCCESS: {
-        const post = draft.mainPosts((v) => v.id === action.data.postId);
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        console.log(post);
         post.Likers.push({ id: action.data.UserId });
         draft.likePostLoading = false;
         draft.likePostDone = true;
@@ -228,7 +229,8 @@ const reducer = (state = initialState, action) =>
         draft.unlikePostError = null;
         break;
       case UNLIKE_POST_SUCCESS: {
-        const post = draft.mainPosts((v) => v.id === action.data.postId);
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        console.log(post);
         post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
         draft.unlikePostLoading = false;
         draft.unlikePostDone = true;

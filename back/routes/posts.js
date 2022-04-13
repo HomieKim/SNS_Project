@@ -1,5 +1,5 @@
 const express = require('express');
-const Op = require('sequelize');
+const {Op} = require('sequelize');
 const { Post, User, Image, Comment } = require('../models');
 
 const router = express.Router();
@@ -20,7 +20,7 @@ router.get('/' ,async (req, res, next)=>{
       }, {
         model: Image,
       },{
-        moudel: Comment,
+        model: Comment,
         include: [{
           model: User,
           attributes: ['id', 'nickname'],

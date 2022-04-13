@@ -22,9 +22,16 @@ const Home = () => {
   }, [retweeError]);
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
+    if (!me) {
+      dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+      });
+    }
+    if (hasMorePosts) {
+      dispatch({
+        type: LOAD_POST_REQUEST,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -49,7 +56,11 @@ const Home = () => {
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
-      <div ref={hasMorePosts && !loadPostLoading ? ref : undefined} />
+      {mainPosts.length !== 0 ? (
+        <div ref={hasMorePosts && !loadPostLoading ? ref : undefined} />
+      ) : (
+        ''
+      )}
     </AppLayout>
   );
 };

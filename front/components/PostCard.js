@@ -85,8 +85,8 @@ const PostCard = ({ post }) => {
             <Avatar>{post.User.nickname[0]}</Avatar>
             <div style={{ marginLeft: '20px' }}>
               {post.RetweetId && post.Retweet
-                ? post.User.nickname
-                : `${post.User.nickname} 님이 Retweet`}
+                ? `${post.User.nickname} 님이 Retweet`
+                : post.User.nickname}
             </div>
           </div>
         }

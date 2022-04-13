@@ -152,7 +152,7 @@ router.get('/followers',isLoggedIn, async(req,res,next)=>{
     if(!user){
       res.status(403).send('존재하지 않는 유저 입니다.');
     }
-    const followers = user.getFollowers();
+    const followers = await user.getFollowers();
     res.status(200).json(followers);
   }catch(err){
     console.error(err);
@@ -166,7 +166,7 @@ router.get('/followings',isLoggedIn, async(req,res,next)=>{
     if(!user){
       res.status(403).send('존재하지 않는 유저 입니다.');
     }
-    const followings = user.getFollowings();
+    const followings = await user.getFollowings();
     res.status(200).json(followings);
   }catch(err){
     console.error(err);

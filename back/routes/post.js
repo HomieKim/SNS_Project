@@ -105,10 +105,11 @@ router.post('/:postId/comment', isLoggedIn,async (req, res, next) => {
     res.status(201).json(fullComment);
   }catch(error){
     console.error(error);
+    next(error);
   }
 });
 
-router.patch('/:id/like', isLoggedIn ,async(res, req,next) =>{
+router.patch('/:postId/like', isLoggedIn ,async(req, res,next) =>{
   try{
     const post = await Post.findOne({where : {id: req.params.postId}});
     if(!post) {
@@ -122,7 +123,7 @@ router.patch('/:id/like', isLoggedIn ,async(res, req,next) =>{
   }
 });
 
-router.delete('/:id/like', isLoggedIn, async(res, req, next) => {
+router.delete('/:postId/like', isLoggedIn, async(req, res, next) => {
   try{
     const post = await Post.findOne({ where : {id : req.params.postId}});
     if(!post) {
@@ -136,7 +137,7 @@ router.delete('/:id/like', isLoggedIn, async(res, req, next) => {
   }
 });
 
-router.delete('/:postId', isLoggedIn ,async(res, req, next) => {
+router.delete('/:postId', isLoggedIn ,async(req, res, next) => {
   try{
     await Post.destroy({ // destroy 는 시퀄라이즈에서 제공하는 삭제하는 함수
       where: {

@@ -25,13 +25,14 @@ export const initialState = {
   changeNicknameLoading: false,
   changeNicknameDone: false,
   changeNicknameError: null,
-  me: null,
-  signUpData: {},
-  loginData: {},
   // user 정보 가져오기
   loadMyInfoLoading: false,
   loadMyInfoDone: false,
   loadMyInfoError: null,
+  // 다른 user 정보 가져오기
+  loadUserLoading: false,
+  loadUserDone: false,
+  loadUserError: null,
   // 팔로워 정보 가져오기
   loadFollowersLoading: false,
   loadFollowersDone: false,
@@ -43,6 +44,8 @@ export const initialState = {
   removeFollowerLoading: false,
   removeFollowerDone: false,
   removeFollowerError: null,
+  me: null,
+  userInfo: null,
 };
 
 /* 액션 타입 정의 */
@@ -89,6 +92,10 @@ export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
 export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+// 유저 정보 로드
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 // success나 failure 액션은 사가에서 put으로 호출하기 때문에 reducer에서는 따로 정의 안해도 됨 요청 액션 생성함수만 정의
 export const loginRequestAction = (data) => {
   return {
@@ -282,6 +289,20 @@ const reducer = (state = initialState, action) =>
       case REMOVE_FOLLOWER_FAILURE:
         draft.removeFollowerLoading = false;
         draft.removeFollowerError = action.error;
+        break;
+      case LOAD_USER_REQUEST:
+        draft.loadUserLoading = true;
+        draft.loadUserError = null;
+        draft.loadUserDone = false;
+        break;
+      case LOAD_USER_SUCCESS:
+        draft.loadUserLoading = false;
+        draft.userInfo = action.data;
+        draft.loadUserDone = true;
+        break;
+      case LOAD_USER_FAILURE:
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
         break;
       default:
         break;

@@ -16,6 +16,9 @@ import {
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
+  LOAD_USER_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -71,6 +74,9 @@ function loadFollowingsAPI(data) {
 }
 function removerFollowerAPI(data) {
   return axios.delete(`user/followers/${data}`);
+}
+function loadUserAPI(data) {
+  return axios.get(`/user/${data}`);
 }
 // 사가 함수
 function* logIn(action) {
@@ -226,6 +232,21 @@ function* removeFollower(action) {
     });
   }
 }
+function* loadUser(action) {
+  try {
+    const result = yield call(loadUserAPI, action.data);
+    yield put({
+      type: LOAD_USER_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: LOAD_USER_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
 // watch 함수 (이벤트 리스너 같은 역할)
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
@@ -262,6 +283,9 @@ function* watchLoadFollowings() {
 function* watchRemoveFollower() {
   yield takeLatest(REMOVE_FOLLOWER_REQUEST, removeFollower);
 }
+function* watchLoadUser() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -274,5 +298,6 @@ export default function* userSaga() {
     fork(watchLoadFollowers),
     fork(watchLoadFollowings),
     fork(watchRemoveFollower),
+    fork(watchLoadUser),
   ]);
 }

@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user')
+const hashtageRouter = require('./routes/hashtag');
 const passportConfig = require('./passport');
 const db = require('./models');
 const session = require('express-session');
@@ -54,6 +55,7 @@ app.get('/', (req,res) => {
 app.use('/post', postRouter);
 app.use('/posts',postsRouter);
 app.use('/user', userRouter);
+app.use('/hashtag', hashtageRouter);
 
 
 

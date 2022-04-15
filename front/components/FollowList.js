@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST } from '../reducers/user';
 
-const FollowList = ({ header, data }) => {
+const FollowList = ({ header, data, onClickMore, loading }) => {
   // 스타일 객체 리렌더링 안되게
   const StyleList = useMemo(
     () => ({
@@ -63,7 +63,9 @@ const FollowList = ({ header, data }) => {
       size="small"
       loadMore={
         <div style={StyleLoadMore}>
-          <Button>더보기</Button>
+          <Button onClick={onClickMore} loading={loading}>
+            더보기
+          </Button>
         </div>
       }
       bordered
@@ -84,6 +86,8 @@ const FollowList = ({ header, data }) => {
 FollowList.propTypes = {
   header: propTypes.string.isRequired,
   data: propTypes.array.isRequired,
+  onClickMore: propTypes.func.isRequired,
+  loading: propTypes.bool.isRequired,
 };
 
 export default FollowList;

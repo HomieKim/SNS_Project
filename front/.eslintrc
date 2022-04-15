@@ -18,7 +18,8 @@
     ],
     "plugins" : [
         "import",
-        "react-hooks"
+        "react-hooks",
+        "jsx-a11y"
     ],
     "rules": {
         "jsx-a11y/label-has-associated-control": "off",
@@ -30,6 +31,7 @@
         "react/jsx-one-expression-per-line": "off",
         "react/jsx-wrap-multilines": "off",
         "react/no-array-index-key": "off",
+        "react/jsx-props-no-spreading": "off",
         "object-curly-newline": "off",
         "linebreak-style": "off",
         "arrow-body-style": "off",

@@ -60,7 +60,10 @@ const Home = () => {
         <PostCard key={post.id} post={post} />
       ))}
       {mainPosts.length !== 0 ? (
-        <div ref={hasMorePosts && !loadPostLoading ? ref : undefined} />
+        <div
+          style={{ height: 2 }}
+          ref={hasMorePosts && !loadPostLoading ? ref : undefined}
+        />
       ) : (
         ''
       )}
@@ -69,7 +72,9 @@ const Home = () => {
 };
 
 // eslint-disable-next-line prettier/prettier
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req }) => {
       // Home 보다 먼저 실행 됨
       console.log('store! : ', store);
       console.log('req! : ', req);

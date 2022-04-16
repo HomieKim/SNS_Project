@@ -1,17 +1,18 @@
 import { Button, Card, Comment, List, Popover } from 'antd';
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import PropTypes from 'prop-types';
-import {
-  EllipsisOutlined,
-  HeartOutlined,
-  HeartTwoTone,
-  MessageOutlined,
-  RetweetOutlined,
-} from '@ant-design/icons/lib/icons';
+import EllipsisOutlined from '@ant-design/icons/EllipsisOutlined';
+import HeartOutlined from '@ant-design/icons/HeartOutlined';
+import HeartTwoTone from '@ant-design/icons/HeartTwoTone';
+import MessageOutlined from '@ant-design/icons/MessageOutlined';
+import RetweetOutlined from '@ant-design/icons/RetweetOutlined';
 import Avatar from 'antd/lib/avatar/avatar';
 import Link from 'next/link';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ko';
 import PostCardContent from './PostCardContent';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
@@ -26,6 +27,22 @@ import FollowButton from './FollowButton';
 const StyleCardWrpper = styled.div`
   margin-bottom: 20px;
 `;
+const StyleDate = styled.div`
+  position: absolute;
+  font-size: 10px;
+  margin-top: 12px;
+  color: grey;
+`;
+const Global = createGlobalStyle`
+  .ant-card-body {
+    padding-bottom : 36px;
+  }
+  .ant-card-meta-description {
+    font-size : 17px;
+  }
+`;
+dayjs.locale('ko');
+dayjs.extend(relativeTime);
 
 const PostCard = ({ post }) => {
   // const id = useSelector((state) => state.user.me && state.user.me.id);
@@ -79,6 +96,7 @@ const PostCard = ({ post }) => {
 
   return (
     <StyleCardWrpper>
+      <Global />
       <Card
         title={
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -156,13 +174,17 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
+            <StyleDate>{dayjs(post.createdAt).fromNow()}</StyleDate>
           </Card>
         ) : (
-          <Card.Meta
-            // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-            // title={post.User.nickname}
-            description={<PostCardContent postData={post.content} />}
-          />
+          <>
+            <Card.Meta
+              // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+              // title={post.User.nickname}
+              description={<PostCardContent postData={post.content} />}
+            />
+            <StyleDate>{dayjs(post.createdAt).fromNow()}</StyleDate>
+          </>
         )}
       </Card>
       {isCommentOpen && (

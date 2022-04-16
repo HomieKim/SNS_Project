@@ -1,4 +1,4 @@
-import { StopOutlined } from '@ant-design/icons/lib/icons';
+import StopOutlined from '@ant-design/icons/StopOutlined';
 import { Button, Card, List } from 'antd';
 import propTypes from 'prop-types';
 import React, { useMemo } from 'react';

@@ -1,7 +1,7 @@
 import { PropTypes } from 'prop-types';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { CloseOutlined } from '@ant-design/icons';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
 
 const StyledBackground = styled.div`
   position: fixed;

@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "dev": "next -p 3060",
-    "build": "next build"
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build"
   },
   "author": "homie",
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@next/bundle-analyzer": "^12.1.5",
     "antd": "^4.18.7",
     "axios": "^0.26.0",
     "babel-plugin-styled-components": "^2.0.2",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.1",
     "faker": "^5.5.3",
     "immer": "^9.0.12",
     "next": "^12.0.10",

@@ -82,7 +82,11 @@ const PostCard = ({ post }) => {
       <Card
         title={
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar>{post.User.nickname[0]}</Avatar>
+            <Link href={`/user/${post.User.id}`}>
+              <a>
+                <Avatar>{post.User.nickname[0]}</Avatar>
+              </a>
+            </Link>
             <div style={{ marginLeft: '20px' }}>
               {post.RetweetId && post.Retweet
                 ? `${post.User.nickname} 님이 Retweet`
@@ -133,7 +137,11 @@ const PostCard = ({ post }) => {
           <Card
             title={
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                <Link href={`/user/${post.Retweet.User.id}`}>
+                  <a>
+                    <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
                 <div style={{ marginLeft: '20px' }}>
                   {post.Retweet.User.nickname}
                 </div>

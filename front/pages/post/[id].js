@@ -28,6 +28,7 @@ const Post = () => {
           content={`${singlePost.User.nickname}님의 게시글`}
         />
         <meta property="og:description" content={singlePost.content} />
+        <meta property="og:url" content={`https://nodebird.com/post/${id}`} />
       </Head>
       <PostCard post={singlePost} />
     </AppLayout>

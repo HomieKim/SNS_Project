@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Router, { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import UserProfile from './UserProfile';
 import LoginForm from './LoginForm';
+import useInput from '../hooks/useInput';
 
 const StyleSearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -22,7 +24,13 @@ const ContentsContainer = styled.div`
   margin: auto;
 `;
 const AppLayout = ({ children }) => {
+  const [searchInput, onChangeSerachInput] = useInput();
+  const router = useRouter();
   const { me } = useSelector((state) => state.user);
+
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
 
   return (
     <div>
@@ -30,8 +38,8 @@ const AppLayout = ({ children }) => {
         style={{ width: '100%', borderBottom: '1px solid rgb(230,230,230)' }}
       >
         <StyleContainer>
-          <Menu mode="horizontal">
-            <Menu.Item key="home">
+          <Menu mode="horizontal" selectedKeys={[router.pathname]}>
+            <Menu.Item key="/">
               <Link href="/">
                 <a>노드버드</a>
               </Link>
@@ -42,7 +50,12 @@ const AppLayout = ({ children }) => {
               </Link>
             </Menu.Item>
             <Menu.Item key="search">
-              <StyleSearchInput enterButton />
+              <StyleSearchInput
+                enterButton
+                value={searchInput}
+                onChange={onChangeSerachInput}
+                onSearch={onSearch}
+              />
             </Menu.Item>
             <Menu.Item key="signup">
               <Link href="/signup">

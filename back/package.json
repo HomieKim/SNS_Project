@@ -4,7 +4,8 @@
   "description": "sns-node-server",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "start" : "node app"
   },
   "author": "homie",
   "license": "ISC",

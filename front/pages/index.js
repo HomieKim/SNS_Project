@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';

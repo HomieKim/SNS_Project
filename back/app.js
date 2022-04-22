@@ -12,6 +12,8 @@ const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 const app = express();
 dotenv.config();
@@ -24,9 +26,18 @@ db.sequelize.sync()
 
 passportConfig();
 
-app.use(morgan('dev'));
+// 배포 모드 일때
+if(process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+  // 보안에 도움 되는 패키지
+  app.use(hpp());
+  app.use(helmet());
+} else {
+  app.use(morgan('dev'));
+}
+
 app.use(cors({
-  origin: 'http://localhost:3060',
+  origin: ['http://localhost:3060', 'nodebird.com'],
   credentials: true,
 }));
 
